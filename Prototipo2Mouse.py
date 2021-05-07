@@ -5,6 +5,7 @@
 
 import cv2
 import mediapipe as mp
+import pyautogui
 
 
 mp_drawing = mp.solutions.drawing_utils
@@ -16,6 +17,28 @@ cap = cv2.VideoCapture(0) #acceso a la camara integrada del computador
 #Guardara en que estado se encuentra actualmente el programa
 # 0: Defecto, 1: Start, 2: Update, 3: Error
 estado = 0
+
+#Tamaño de la pantalla
+width, height = pyautogui.size()
+
+
+#Mover el puntero del mouse
+def moverRaton(xm,ym):
+    #Mover el mouse
+    pyautogui.FAILSAFE=False #evitar errores cuando se esta en los bordes del screen
+    pyautogui.moveTo(xm,ym) #el cursor del mouse se mueve a la direccion indicada
+
+#Click mouse
+def clickRaton(y1,y2):
+    if(y1>y2):
+        #liberar el mouse
+        print("Release Mouse")
+        #pyautogui.mouseUp()
+    else:
+        #oprimir el mouse
+        print("Click Mouse")
+        #pyautogui.mouseDown()
+        
 
 with mp_hands.Hands(static_image_mode=False,max_num_hands=2, min_detection_confidence=0.8) as hands:
     
@@ -33,14 +56,14 @@ with mp_hands.Hands(static_image_mode=False,max_num_hands=2, min_detection_confi
         
         #Estados
         if(estado == 1): #Start
-            #print("Start")
+            print("Screen size: (" + str(width) + "," + str(height) + ")")
             
             estado = 2
             
         elif(estado == 2): #Update
             #print("Update")
             
-            #Screen
+            #Camara
             h,w,_ = fotograma.shape #Tamaño
             fotograma = cv2.flip(fotograma,1) #Efecto espejo
             fotograma = cv2.cvtColor(fotograma,cv2.COLOR_BGR2RGB)
@@ -63,6 +86,16 @@ with mp_hands.Hands(static_image_mode=False,max_num_hands=2, min_detection_confi
                     xp = int(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x * w)
                     yp = int(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y * h)
                     cv2.circle(fotograma,(xp,yp),5,(255,0,255),-1)
+                    cv2.putText(fotograma,'{},{}'.format(xp,yp),(xp+10,yp), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0,255,0), 1, cv2.LINE_AA)
+                    #llama a la funcion de mapeo
+                    xm = int(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x * width)
+                    ym = int(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y * height)
+                    #llama a la función para mover el mouse
+                    moverRaton(xm, ym)
+                    #llama a la funcion de clickear mouse
+                    y1 = int(hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP].y * h)
+                    y2 = int(hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].y * h)
+                    clickRaton(y1,y2)
                     
             #Mostrar la captura
             cv2.imshow("Camara", fotograma)

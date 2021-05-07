@@ -29,14 +29,14 @@ def moverRaton(xm,ym):
     pyautogui.moveTo(xm,ym) #el cursor del mouse se mueve a la direccion indicada
 
 #Click mouse
-def clickRaton(y1,y2):
-    if(y1>y2):
+def clickRaton(v1,v2):
+    if(v1>v2):
         #liberar el mouse
-        print("Release Mouse")
+        #print("Release Mouse")
         pyautogui.mouseUp()
     else:
         #oprimir el mouse
-        print("Click Mouse")
+        #print("Click Mouse")
         cv2.putText(fotograma,'Click',(xp+10,yp), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0,255,0), 1, cv2.LINE_AA)
         pyautogui.mouseDown()
         
@@ -94,9 +94,9 @@ with mp_hands.Hands(static_image_mode=False,max_num_hands=2, min_detection_confi
                     #llama a la función para mover el mouse
                     moverRaton(xm, ym)
                     #llama a la funcion de clickear mouse
-                    y1 = int(hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP].y * h)
-                    y2 = int(hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].y * h)
-                    clickRaton(y1, y2)
+                    v1 = int(hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_TIP].y * h)
+                    v2 = int(hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_MCP].y * h)
+                    clickRaton(v1, v2)
                     
             #Mostrar la captura
             cv2.imshow("Camara", fotograma)

@@ -33,11 +33,12 @@ def clickRaton(y1,y2):
     if(y1>y2):
         #liberar el mouse
         print("Release Mouse")
-        #pyautogui.mouseUp()
+        pyautogui.mouseUp()
     else:
         #oprimir el mouse
         print("Click Mouse")
-        #pyautogui.mouseDown()
+        cv2.putText(fotograma,'Click',(xp+10,yp), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0,255,0), 1, cv2.LINE_AA)
+        pyautogui.mouseDown()
         
 
 with mp_hands.Hands(static_image_mode=False,max_num_hands=2, min_detection_confidence=0.8) as hands:
@@ -86,7 +87,7 @@ with mp_hands.Hands(static_image_mode=False,max_num_hands=2, min_detection_confi
                     xp = int(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x * w)
                     yp = int(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y * h)
                     cv2.circle(fotograma,(xp,yp),5,(255,0,255),-1)
-                    cv2.putText(fotograma,'{},{}'.format(xp,yp),(xp+10,yp), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0,255,0), 1, cv2.LINE_AA)
+                    #cv2.putText(fotograma,'{},{}'.format(xp,yp),(xp+10,yp), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0,255,0), 1, cv2.LINE_AA)
                     #llama a la funcion de mapeo
                     xm = int(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x * width)
                     ym = int(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y * height)
@@ -95,7 +96,7 @@ with mp_hands.Hands(static_image_mode=False,max_num_hands=2, min_detection_confi
                     #llama a la funcion de clickear mouse
                     y1 = int(hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP].y * h)
                     y2 = int(hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].y * h)
-                    clickRaton(y1,y2)
+                    clickRaton(y1, y2)
                     
             #Mostrar la captura
             cv2.imshow("Camara", fotograma)

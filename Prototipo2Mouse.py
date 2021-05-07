@@ -57,9 +57,13 @@ with mp_hands.Hands(static_image_mode=False,max_num_hands=2, min_detection_confi
                 #Accediendo a los puntos clave
                 for hand_landmarks in resultado.multi_hand_landmarks:
                     #Dibujar puntos clave
-                    print(hand_landmarks)
-                    mp_drawing.draw_landmarks(fotograma, hand_landmarks, mp_hands.HAND_CONNECTIONS)
-            
+                    #print(hand_landmarks)
+                    #mp_drawing.draw_landmarks(fotograma, hand_landmarks, mp_hands.HAND_CONNECTIONS)
+                    #Dibujar puntero (punta dedo indice)
+                    xp = int(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x * w)
+                    yp = int(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y * h)
+                    cv2.circle(fotograma,(xp,yp),5,(255,0,255),-1)
+                    
             #Mostrar la captura
             cv2.imshow("Camara", fotograma)
             

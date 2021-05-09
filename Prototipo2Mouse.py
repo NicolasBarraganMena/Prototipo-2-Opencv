@@ -41,7 +41,7 @@ def clickRaton(v1,v2):
         pyautogui.mouseDown()
         
 
-with mp_hands.Hands(static_image_mode=False,max_num_hands=2, min_detection_confidence=0.8) as hands:
+with mp_hands.Hands(static_image_mode=False,max_num_hands=1, min_detection_confidence=0.8) as hands:
     
     #ciclo infinito "update"
     while True:
